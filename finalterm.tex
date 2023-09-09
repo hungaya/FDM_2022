@@ -1,0 +1,1182 @@
+\documentclass[9pt]{beamer}
+\usepackage[utf8]{vietnam}
+%----------Packages----------
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{framed,color}
+\usepackage{esint}
+\usepackage{amsthm}
+%\usepackage{amsrefs}
+\usepackage{dsfont}
+\usepackage{color}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage[all]{xy}
+\usepackage[mathscr]{eucal}
+\usepackage{verbatim}  %%includes comment environmenthttps://www.overleaf.com/7333733538cgxrxfpzqxhk
+\usepackage{hyperref}
+\usepackage[scr]{rsfso}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usepackage{graphicx}
+
+\usepackage[
+backend=biber,
+style=alphabetic,
+sorting=ynt
+]{biblatex}
+\addbibresource{references.bib}
+
+
+%---------math operators------
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator\supp{supp}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\sets}{\mathbf{Sets}}
+\DeclareMathOperator{\topbf}{\mathbf{Top}}
+\DeclareMathOperator{\topbfast}{\mathbf{Top_\ast}}
+\DeclareMathOperator{\grp}{\mathbf{Groups}}
+\DeclareMathOperator{\obj}{obj}
+\DeclareMathOperator{\id}{Id}
+\DeclareMathOperator{\esssup}{esssup}
+\DeclareMathOperator{\sgn}{sgn}
+
+\mode<presentation>
+{
+  \usetheme{Warsaw}      % or try Darmstadt, Madrid, Warsaw, ...
+  \usecolortheme{whale} % or try albatross, beaver, crane, ...
+  \usefonttheme{default}  % or try serif, structurebold, ...
+  \setbeamertemplate{navigation symbols}{}
+  \setbeamertemplate{caption}[numbered]
+}
+
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+
+\numberwithin{equation}{section}
+
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Mục lục}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+\title[Giải tích sai phân hữu hạn]{Bài Cuối kỳ môn Giải tích sai phân hữu hạn}
+\author{Đỗ Sỹ Hưng}
+\institute{Trường Đại học Khoa học Tự nhiên, ĐHQG TP.HCM}
+\date{Ngày 20 tháng 11 năm 2022}
+
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+%---------------------------------------------------
+%---------------------------------------------------
+
+% \begin{frame}[plain]
+% 	\tableofcontents
+% \end{frame}
+% Uncomment these lines for an automatically generated outline.
+\begin{frame}{Mục lục}
+ \tableofcontents
+\end{frame}
+
+%---------------------------------------------------
+%---------------------------------------------------
+\section{Phương pháp sai phân hữu hạn cho Phương trình ellitpic}
+
+\subsection{Phương trình đạo hàm riêng elliptic}
+
+\begin{frame}
+\begin{block}{Định nghĩa Phương trình elliptic}
+    Cho phương trình đạo hàm riêng có dạng như sau
+    \begin{align}
+        a(x,y) u_{xx} + &b(x,y) u_{xy} + c(x,y) u_{yy} \nonumber \\
+        &+ d(x,y) u_x + e(x,y) u_y + g(x,y) u(x,y) = f(x,y) \label{deq:elliptic}
+    \end{align}
+    với $(x,y) \in \Omega$ là miền bị chặn trong không gian $\mathbb{R}^2$.
+    Nếu các hệ số của phương trình thoả mãn điều kiện
+    \begin{align*}
+        b^2 - ac < 0 \text{ với mọi } (x,y) \in \Omega,
+    \end{align*}
+    thì phương trình được gọi là \textbf{Phương trình elliptic}.
+\end{block}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Nhận xét}
+    Cho $a = c = -1$, $b = 0, d = e = 1$ và $g(x,y) = c$ là một hệ số hằng. Khi đó Phương trình (\ref{deq:elliptic}) trở thành
+    \begin{align*}
+        - u_{xx} - u_{yy} + u_x + u_y + c u(x,y) = f(x,y)
+    \end{align*}
+    Ta có thể viết gọn hơn bằng sử dụng các toán tử vi phân như sau
+    \begin{align*}
+        -\Delta u + {\bf b} \nabla u + cu(x,y) = f(x,y)
+    \end{align*}
+    trong đó vector ${\bf b} = (1,1)$ và
+    \begin{align*}
+        \Delta u &= \frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2}, \\
+        \nabla u &= \left(\frac{\partial u}{\partial x}, \frac{\partial u}{\partial x}\right).
+    \end{align*}
+\end{exampleblock}
+\end{frame}
+
+\subsection{Phương trình vi phân}
+
+\begin{frame}
+\begin{block}{Bài toán}
+    Giải phương trình elliptic sau bằng phương pháp sai phân hữu hạn
+    \begin{align}
+        -\Delta u + {\bf b} \nabla u + cu(x,y) = f(x,y), \text{ với } (x,y) \in \Omega \label{deq:eq}
+    \end{align}
+    với $\Omega = (0,1) \times (0,1)$, ${\bf b} = (1,1)$. Điều kiện biên của phương trình (\ref{deq:eq}) là
+    \begin{align*}
+        \nabla u(0, y) . {\bf n_1} &= g_1, \\
+        u(x, 0) &= g_2, \\
+        \nabla u(1, y) . {\bf n_3} + \alpha u(1, y) &= g_3, \\
+        u(x, 1) &= g_4.
+    \end{align*}
+    trong đó $\alpha \ne 0$, hai vector ${\bf n_1}, {\bf n_3}$ là các vector pháp tuyến vuông góc với biên $\partial \Omega$.
+\end{block}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Nhận xét}
+    Giả sử biên $\partial \Omega$ được tách thành 4 phần
+    \begin{align*}
+        \Gamma_1 = \{ (0,y) \mid y \in [0,1] \}, \\
+        \Gamma_2 = \{ (x,0) \mid x \in [0,1] \}, \\
+        \Gamma_3 = \{ (1,y) \mid y \in [0,1] \}, \\
+        \Gamma_4 = \{ (x,1) \mid x \in [0,1] \}.
+    \end{align*}
+    Điều kiện biên của Phương trình (\ref{deq:eq}) được thay thế bởi các điều kiện biên sau
+    \begin{align*}
+        \nabla u . n_1 = g_1, &(x,y) \in \Gamma_1, \\
+        u = g_2, &(x,y) \in \Gamma_2, \\
+        \nabla u . n_3 + \alpha u = g_3, &(x,y) \in \Gamma_3, \\
+        u = g_4, &(x,y) \in \Gamma_4.
+    \end{align*}
+\end{exampleblock}
+\end{frame}
+
+\subsection{Phương pháp sai phân hữu hạn}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    Ban đầu, ta thực hiện chia lưới cho miền $\Omega$. Để đơn giản, lưới xây dựng là lưới hình vuông, nghĩa là số điểm rời rạc theo biễn $x$ và biến $y$ là như nhau và bằng $N$. Cụ thể, đối với $x \in [0,1]$, ta được các điểm $$0 = x_1 \le x_2 \le \ldots x_N = 1,$$ tương tự với $y \in [0,1]$, ta có $$0 = y_1 \le y_2 \le \ldots \le y_N = 1.$$
+    Đặt $P_{ij}$ là điểm tại vị trí $(x_i, y_j)$, $u_{ij}$ là giá trị xấp xỉ tại điểm $P_{ij}$. Khi đó công thức sai phân trung tâm của đạo hàm tại điểm $P_{ij}$ là
+    \begin{align*}
+        \frac{\partial u}{\partial x}(P_{ij})
+        &\approx \frac{u_{i+1,j} - u_{i-1,j}}{2 \Delta x}, \\
+        \frac{\partial u}{\partial y}(P_{ij})
+        &\approx \frac{u_{i,j+1} - u_{i,j-1}}{2 \Delta y}
+    \end{align*}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    Công thức sai phân trung tâm của đạo hàm cấp hai tại điểm $P_{ij}$ là
+    \begin{align*}
+        \frac{\partial^2 u}{\partial x^2}(P_{ij})
+        &\approx \frac{u_{i-1,j} - 2 u_{ij} + u_{i+1,j}}{\Delta x^2}, \\
+        \frac{\partial^2 u}{\partial y^2}(P_{ij})
+        &\approx \frac{u_{i,j-1} - 2 u_{ij} + u_{i,j+1}}{\Delta y^2}.
+    \end{align*}
+    Một dạng khác của Phương trình (\ref{deq:eq}) là
+    \begin{align}
+        -\frac{\partial^2 u}{\partial x^2} - \frac{\partial^2 u}{\partial y^2} + \frac{\partial u}{\partial x} + \frac{\partial u}{\partial y} + c u(x,y) = f(x,y) .\label{deq:exeq}
+    \end{align}
+    Thay thế các công thức sai phân trung tâm vào Phương trình (\ref{deq:exeq}), ta được
+    \begin{align}
+        \frac{-u_{i-1,j} + 2u_{ij} - u_{i+1,j}}{\Delta x^2} &+ \frac{-u_{i,j-1} + 2u_{ij} - u_{i,j+1}}{\Delta y^2} \nonumber \\
+        &+ \frac{u_{i+1,j} - u_{i-1,j}}{2 \Delta x} + \frac{u_{i,j+1} - u_{i,j-1}}{2 \Delta y} + c u_{ij} = f_{ij} \label{deq:fdmeq}
+    \end{align}
+    với $f_{ij} = f(x_i, y_j)$.
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    Thực hiện gom nhóm các hệ số cho từng biến $u$
+    \begin{align}
+        \left(-\frac{1}{\Delta x^2} - \frac{1}{2 \Delta x}\right) u_{i-1,j} &+
+        \left(\frac{1}{\Delta x^2} + \frac{1}{2 \Delta x}\right) u_{i+1,j} \nonumber \\&+
+        \left(-\frac{1}{\Delta y^2} - \frac{1}{2 \Delta y}\right) u_{i,j-1} +
+        \left(-\frac{1}{\Delta y^2} + \frac{1}{2 \Delta y}\right) u_{i,j+1} \nonumber \\&+
+        \left(\frac{2}{\Delta x^2} + \frac{2}{\Delta y^2} + c\right) u_{ij} = f_{ij} \label{deq:fdmeq:general}
+    \end{align}
+    Công thức (\ref{deq:fdmeq:general}) là công thức tổng quát tại điểm $P_{ij}$.
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    Sau khi xây dựng công thức tổng quát cho $P_{ij}$, ta sẽ xây dựng từng công thức tương ứng cho từng điều kiện biên. Với các biên $\Gamma_2, \Gamma_4$, điều kiện biên là điều kiện Dirichlet, khi đó
+    \begin{align*}
+        u_{i1} = g_2, \forall i = \overline{1,N}, \\
+        u_{iN} = g_4, \forall i = \overline{1,N}.
+    \end{align*}
+    Ngoài ra, xét hai điểm có dạng $P_{i2}$ và $P_{i,N-1}$ với $2 \le i \le N-1$. Đối với điểm $P_{i2}$, từ Phương trình (\ref{deq:fdmeq:general})
+    \begin{align*}
+        \left(-\frac{1}{\Delta x^2} - \frac{1}{2\Delta x}\right) u_{i-1,2} &+
+        \left(-\frac{1}{\Delta x^2} + \frac{1}{2\Delta x}\right) u_{i+1,2} +
+        \left(-\frac{1}{\Delta y^2} - \frac{1}{2\Delta y}\right) u_{i1} \\ &+
+        \left(-\frac{1}{\Delta y^2} + \frac{1}{2\Delta y}\right) u_{i3} +
+        \left(\frac{2}{\Delta x^2} + \frac{2}{\Delta y^2} + c\right) u_{i2}
+        = f_{i2}
+    \end{align*}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    Thay $u_{i1} = g_2$, ta được
+    \begin{align}
+        \left(-\frac{1}{\Delta x^2} - \frac{1}{2\Delta x}\right) u_{i-1,2} &+
+        \left(-\frac{1}{\Delta x^2} + \frac{1}{2\Delta x}\right) u_{i+1,2} +
+        \left(-\frac{1}{\Delta y^2} + \frac{1}{2\Delta y}\right) u_{i3} \nonumber \\ &+
+        \left(\frac{2}{\Delta x^2} + \frac{2}{\Delta y^2} + c\right) u_{i2}
+        = f_{i2} + \left(\frac{1}{\Delta y^2} + \frac{1}{2\Delta y}\right) g_2. \label{deq:fdmeq:dirichlet:i2}
+    \end{align}
+    Công thức (\ref{deq:fdmeq:dirichlet:i2}) là công thức tổng quát tại điểm $P_{i2}$. \\
+
+    Xét các điểm $P_{i,N-1}$, từ Phương trình (\ref{deq:fdmeq:general})
+    \begin{align*}
+        &\left(-\frac{1}{\Delta x^2} - \frac{1}{2\Delta x}\right) u_{i-1,N-1} +
+        \left(-\frac{1}{\Delta x^2} + \frac{1}{2\Delta x}\right) u_{i+1,N-1} +
+        \left(-\frac{1}{\Delta y^2} - \frac{1}{2\Delta y}\right) u_{i,N-2} \\ &\quad \quad +
+        \left(-\frac{1}{\Delta y^2} + \frac{1}{2\Delta y}\right) U_{1N} +
+        \left(\frac{2}{\Delta x^2} + \frac{2}{\Delta y^2} + c\right) u_{i,N-1} = f_{i,N-1}
+    \end{align*}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    Thay $u_{i,N-1} = g_4$, ta được
+    \begin{align}
+        &\left(-\frac{1}{\Delta x^2} - \frac{1}{2\Delta x}\right) u_{i-1,N-1} +
+        \left(-\frac{1}{\Delta x^2} + \frac{1}{2\Delta x}\right) u_{i+1,N-1} +
+        \left(-\frac{1}{\Delta y^2} - \frac{1}{2\Delta y}\right) u_{i,N-2} \nonumber \\ &\quad \quad +
+        \left(\frac{2}{\Delta x^2} + \frac{2}{\Delta y^2} + c\right) u_{i,N-1} =
+        f_{i,N-1} + \left(\frac{1}{\Delta y^2} - \frac{1}{2\Delta y}\right) g_4. \label{deq:fdmeq:dirichlet:iN}
+    \end{align}
+    Công thức (\ref{deq:fdmeq:dirichlet:iN}) là công thức tổng quát tại điểm $P_{i,N-1}$. \\
+
+    Xét điều kiện biên Neuman cho biên $\Gamma_1$, vector pháp tuyến ${\bf n_1}$ hướng sang bên trái, nên ta chọn ${\bf n_1} = (-1, 0)$, khi đó
+    \begin{align*}
+        \nabla u . n_1 = \left(\frac{\partial u}{\partial x}, \frac{\partial u}{\partial y}\right) . (-1,0) = -\frac{\partial u}{\partial x}.
+    \end{align*}
+    Các điểm trên biên $\Gamma_1$ có dạng $P_{1j}$, với $j = 1 \ldots N$, khi đó điều kiện Neuman trở thành
+    \begin{align*}
+        \nabla u(P_{1j}) . n_1 = -\frac{\partial u}{\partial x}(P_{1j}) = g_1.
+    \end{align*}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    Sử dụng công thức sai phân trung tâm cho đạo hàm, ta được
+    \begin{align*}
+        -\frac{u_{2j} - u_{0j}}{2 \Delta x} = g_1 \Leftrightarrow u_{0j} = u_{2j} + 2 g_1 \Delta x
+    \end{align*}
+    Phương trình (\ref{deq:fdmeq}) cho điểm $P_{1j}$
+    \begin{align*}
+        \frac{-u_{0j} + 2u_{1j} - u_{2j}}{\Delta x^2} &+
+        \frac{-u_{1,j-1} + 2u_{1j} - u_{1,j+1}}{\Delta y^2} \\&+
+        \frac{u_{2j} - u_{0j}}{2 \Delta x} +
+        \frac{u_{1,j+1} - u_{1,j-1}}{2 \Delta y} +
+        c u_{1j} = f_{1j}.
+    \end{align*}
+    Thế $u_{0j}$ vào phương trình trên, ta được
+    \begin{align*}
+        \frac{-2u_{2j} - 2g_1 \Delta x + 2u_{1j}}{\Delta x^2} +
+        \frac{-u_{1,j-1} + 2u_{1j} - u_{1,j+1}}{\Delta y^2} &+
+        \frac{-2g_1 \Delta x}{2\Delta x} \\&+
+        \frac{u_{1,j+1} - u_{1,j-1}}{2 \Delta y} +
+        c u_{1j} = f_{1j},
+    \end{align*}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    tương đương
+    \begin{align}
+        \left(-\frac{2}{\Delta x^2}\right) u_{2j} &+
+        \left(-\frac{1}{\Delta y^2} - \frac{1}{2 \Delta y}\right) u_{1,j-1} +
+        \left(-\frac{1}{\Delta y^2} + \frac{1}{2 \Delta y}\right) u_{1,j+1} \nonumber \\&+
+        \left(\frac{2}{\Delta x^2} + \frac{2}{\Delta y^2} + c\right) u_{1j} =
+        f_{1j} + \left(\frac{2}{\Delta x} + 1\right) g_1. \label{deq:fdmeq:neuman}
+    \end{align}
+    Công thức (\ref{deq:fdmeq:neuman}) là công thức cho các điểm $P_{1j}$, với $j = \overline{1,N}$.
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    Ta xét hai trường hợp riêng cho dạng điểm $P_{1j}$ là điểm $P_{12}$ và $P_{1,N-1}$. Đối với điểm $P_{1j}$, công thức (\ref{deq:fdmeq:neuman}) trở thành
+    \begin{align*}
+        \left(-\frac{2}{\Delta x^2}\right) u_{22} &+
+        \left(-\frac{1}{\Delta y^2} - \frac{1}{2 \Delta y}\right) u_{11} +
+        \left(-\frac{1}{\Delta y^2} + \frac{1}{2 \Delta y}\right) u_{13} \nonumber \\&+
+        \left(\frac{2}{\Delta x^2} + \frac{2}{\Delta y^2} + c\right) u_{12} =
+        f_{12} + \left(\frac{2}{\Delta x} + 1\right) g_1. 
+    \end{align*}
+    Ta thấy $u_{11} = g_2$, thay vào phương trình trên và chuyển ra về phải, ta được
+    \begin{align}
+        \left(-\frac{2}{\Delta x^2}\right) u_{22} &+
+        \left(-\frac{1}{\Delta y^2} + \frac{1}{2 \Delta y}\right) u_{13} +
+        \left(\frac{2}{\Delta x^2} + \frac{2}{\Delta y^2} + c\right) u_{12} \nonumber \\&=
+        f_{12} + \left(\frac{2}{\Delta x} + 1\right) g_1 +
+        \left(\frac{1}{\Delta y^2} + \frac{1}{2 \Delta y}\right) g_2. \label{deq:fdmeq:neuman:12}
+    \end{align}
+    Công thức (\ref{deq:fdmeq:neuman:12}) là công thức cho điểm $P_{12}$.
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    Xét điểm $P_{1,N-1}$, công thức (\ref{deq:fdmeq:neuman}) trở thành
+    \begin{align*}
+        \left(-\frac{2}{\Delta x^2}\right) u_{2,N-1} &+
+        \left(-\frac{1}{\Delta y^2} - \frac{1}{2 \Delta y}\right) u_{1,N-2} +
+        \left(-\frac{1}{\Delta y^2} + \frac{1}{2 \Delta y}\right) u_{1N} \nonumber \\&+
+        \left(\frac{2}{\Delta x^2} + \frac{2}{\Delta y^2} + c\right) u_{1,N-1} =
+        f_{1,N-1} + \left(\frac{2}{\Delta x} + 1\right) g_1. 
+    \end{align*}
+    Ta thấy $u_{1N} = g_4$, thay vào phương trình trên và chuyển ra về phải, ta được
+    \begin{align}
+        \left(-\frac{2}{\Delta x^2}\right) u_{2,N-1} &+
+        \left(-\frac{1}{\Delta y^2} + \frac{1}{2 \Delta y}\right) u_{1,N-2} +
+        \left(\frac{2}{\Delta x^2} + \frac{2}{\Delta y^2} + c\right) u_{1,N-1} \nonumber \\&=
+        f_{1,N-1} + \left(\frac{2}{\Delta x} + 1\right) g_1 +
+        \left(\frac{1}{\Delta y^2} - \frac{1}{2 \Delta y}\right) g_4. \label{deq:fdmeq:neuman:1N}
+    \end{align}
+    Công thức (\ref{deq:fdmeq:neuman:1N}) là công thức cho điểm $P_{1,N-1}$.
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    Xét điều kiện riêng Robin cho biên $\Gamma_3$. Do vector pháp tuyến ${\bf n_3}$ hướng sang bên phải, nên ta chọn ${\bf n_3} = (1,0)$. Khi đó
+    \begin{align*}
+        \nabla u . {\bf n_3} = \left(\frac{\partial u}{\partial x}, \frac{\partial u}{\partial y}\right) . (1,0) = \frac{\partial u}{\partial x}.
+    \end{align*}
+    Các điểm biên $\Gamma_3$ có dạng $P_{Nj}$, với $j = 1 \ldots N$. Khi đó điều kiện Robin trở thành
+    \begin{align*}
+    \nabla u . {\bf n_3}(P_{Nj}) + \alpha u(P_{Nj}) = \frac{\partial u}{\partial x}(P_{Nj}) + \alpha u(P_{Nj}) = g_3.
+    \end{align*}
+    Sử dụng công thức sai phân trung tâm cho đạo hàm, ta được
+    \begin{align*}
+        \frac{u_{N+1,j} - u_{N-1,j}}{2 \Delta x} + \alpha u_{Nj} &= g_3 \\
+        u_{N+1,j} - u_{N-1,j} &= 2 g_3 \Delta x - 2 \alpha u_{Nj} \Delta x \\
+        u_{N+1,j} &= u_{N-1,j} + 2 g_3 \Delta x - 2 \alpha u_{Nj} \Delta x.
+    \end{align*}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    Phương trình (\ref{deq:fdmeq}) cho điểm $P_{Nj}$
+    \begin{align*}
+        \frac{u_{N-1,j} + 2u_{Nj} - u_{N+1,j}}{\Delta x^2} &+
+        \frac{u_{N,j-1} + 2u_{Nj} - u_{N,j+1}}{\Delta y^2} \\&+
+        \frac{u_{N+1,j} - u_{N-1,j}}{2 \Delta x} +
+        \frac{u_{N,j+1} - u_{N,j-1}}{2 \Delta y} +
+        c u_{Nj} = f_{Nj}.
+    \end{align*}
+    Thế $u_{N+1,j}$ vào phương trình trên
+    \begin{align*}
+        &\frac{-2u_{N-1,j} + 2u_{Nj} - 2g_3 \Delta x + 2\alpha u_{Nj} \Delta x}{\Delta x^2} + \frac{u_{N,j-1} + 2u_{Nj} - u_{N,j+1}}{\Delta y^2} \\&\quad\quad +
+        \frac{2g_3\Delta x - 2\alpha u_{Nj}\Delta x}{2\Delta x} +
+        \frac{u_{N,j+1} - u_{N,j-1}}{2 \Delta y} +
+        c u_{Nj} = f_{Nj}.
+    \end{align*}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    tương đương
+    \begin{align}
+        \left(-\frac{2}{\Delta x^2}\right) u_{N-1,j} &+
+        \left(-\frac{1}{\Delta y^2} - \frac{1}{2\Delta y}\right) u_{N,j-1} +
+        \left(-\frac{1}{\Delta y^2} + \frac{1}{2\Delta y}\right) u_{N,j+1} \nonumber \\ &+ 
+        \left(\frac{2}{\Delta x^2} + \frac{2}{\Delta y^2} + \frac{2\alpha}{\Delta x} - \alpha\right) u_{Nj} =
+        f_{Nj} + \left(\frac{2}{\Delta x} - 1\right) g_3. \label{deq:fdmeq:robin}
+    \end{align}
+    Công thức (\ref{deq:fdmeq:robin}) là công thức cho các điểm $P_{Nj}$, với $j = \overline{1,N}$.
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    Ta xét hai trường hợp riêng cho các điểm $P_{Nj}$, là hai điểm $P_{N2}$ và $P_{N,N-1}$. Đối với điểm $P_{N2}$, công thức (\ref{deq:fdmeq:robin}) trở thành
+    \begin{align*}
+        \left(-\frac{2}{\Delta x^2}\right) u_{N-1,2} &+
+        \left(-\frac{1}{\Delta y^2} - \frac{1}{2\Delta y}\right) u_{N1} +
+        \left(-\frac{1}{\Delta y^2} + \frac{1}{2\Delta y}\right) u_{N3} \nonumber \\ &+ 
+        \left(\frac{2}{\Delta x^2} + \frac{2}{\Delta y^2} + \frac{2\alpha}{\Delta x} - \alpha\right) u_{N2} =
+        f_{N2} + \left(\frac{2}{\Delta x} - 1\right) g_3. 
+    \end{align*}
+    Thay $u_{N1} = g_2$ và chuyển sang về phải, ta được
+    \begin{align}
+        \left(-\frac{2}{\Delta x^2}\right) u_{N-1,2} &+
+        \left(-\frac{1}{\Delta y^2} + \frac{1}{2\Delta y}\right) u_{N3} + 
+        \left(\frac{2}{\Delta x^2} + \frac{2}{\Delta y^2} + \frac{2\alpha}{\Delta x} - \alpha\right) u_{N2} \nonumber \\ &=
+        f_{N2} + 
+        \left(\frac{1}{\Delta y^2} + \frac{1}{2\Delta y}\right) g_2 +
+        \left(\frac{2}{\Delta x} - 1\right) g_3. \label{deq:fdmeq:robin:N1}
+    \end{align}
+    Công thức (\ref{deq:fdmeq:robin:N1}) là công thức tại điểm $P_{N2}$.
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    Xét điểm $P_{N,N-1}$, công thức (\ref{deq:fdmeq:robin}) trở thành
+    \begin{align*}
+        \left(-\frac{2}{\Delta x^2}\right) u_{N-1,N-1} &+
+        \left(-\frac{1}{\Delta y^2} - \frac{1}{2\Delta y}\right) u_{N,N-2} +
+        \left(-\frac{1}{\Delta y^2} + \frac{1}{2\Delta y}\right) u_{NN} \nonumber \\ &+ 
+        \left(\frac{2}{\Delta x^2} + \frac{2}{\Delta y^2} + \frac{2\alpha}{\Delta x} - \alpha\right) u_{N,N-1} =
+        f_{N,N-1} + \left(\frac{2}{\Delta x} - 1\right) g_3.
+    \end{align*}
+    Thay $u_{NN} = g_4$ và chuyển sang về phải, ta được
+    \begin{align}
+        \left(-\frac{2}{\Delta x^2}\right) u_{N-1,N-1} &+
+        \left(-\frac{1}{\Delta y^2} - \frac{1}{2\Delta y}\right) u_{N,N-2} +
+        \left(\frac{2}{\Delta x^2} + \frac{2}{\Delta y^2} + \frac{2\alpha}{\Delta x} - \alpha\right) u_{N,N-1} \nonumber \\ &=
+        f_{N,N-1} + \left(\frac{2}{\Delta x} - 1\right) g_3 +
+        \left(\frac{1}{\Delta y^2} - \frac{1}{2\Delta y}\right) g_4. \label{deq:fdmeq:robin:NN}
+    \end{align}
+    Công thức (\ref{deq:fdmeq:robin:NN}) là công thức tại điểm $P_{N,N-1}$.
+\end{exampleblock}
+\end{frame}
+
+\subsection{Công thức ma trận}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    Để hoàn thành Bài toán, ta xây dựng công thức dưới dạng ma trận ${\bf M} \in \mathbb{R}^{N^2 \times N^2}$, và vector ${\bf B} \in \mathbb{R}^{N^2}$ có dạng
+    \begin{align*}
+        {\bf M} {\bf u} = {\bf B}, {\bf u} \in \mathbb{R}^{N^2}.
+    \end{align*}
+    Đầu tiên, xét song ánh giữa hai tập $\{1,\ldots,N\} \times \{1,\ldots,N\}$ và $\{1, \ldots, N^2\}$
+    \begin{align*}
+        (i,j) \longleftrightarrow (i-1)N + j
+    \end{align*}
+    Khi đó một phần tử của ma trận ${\bf M}$ được hoàn toàn xác định bởi 4 tham số $(r_i, r_j, c_i, c_j)$, khi đó phần tử tương ứng với dòng $(r_i - 1)N + r_j$ và cột $(c_i - 1)N + c_j$. Để đơn giản, từ đây về sau, ta chỉ xét dòng có vị trí $(r_i, r_j)$, hoặc xét cột có vị trí $(c_i, c_j)$. \\
+
+    Ma trận ${\bf M}$ là ma trận gồm $N^2$ dòng và $N^2$ cột, mỗi dòng $(i,j)$ của ma trận ${\bf M}$ tương ứng với điểm $P_{ij}$. \\
+    
+    Tương tự, mỗi thành phần ${\bf B}$ có toạ độ $(i,j)$ tương ứng với điểm $P_{ij}$. Mỗi thành phần tử ${\bf u}$ có toạ độ $(i,j)$ tương ứng với điểm $P_{ij}$. \\
+    
+    Ta chia thành 4 trường hợp.
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    \textbf{Trường hợp 1:} Các điểm $P_{ij}$ với $2 \le j \le N-1, 3 \le j \le N-2$, nghĩa là chỉ xét các điểm không nằm trên biên, và các điểm lân cận không nằm trên biên. Khi đó Công thức (\ref{deq:fdmeq:general}) được áp dụng tại dòng $(i,j)$ như sau
+    \begin{align*}
+        {\bf M}((i,j),(i,j)) &= \frac{2}{\Delta x^2} + \frac{2}{\Delta y^2} + c, \\
+        {\bf M}((i,j), (i-1,j)) &= -\frac{1}{\Delta x^2} - \frac{1}{2\Delta x}, \\
+        {\bf M}((i,j), (i+1,j)) &= -\frac{1}{\Delta x^2} + \frac{1}{2\Delta x}, \\
+        {\bf M}((i,j),(i,j-1)) &= -\frac{1}{\Delta y^2} - \frac{1}{2\Delta y}, \\
+        {\bf M}((i,j),(i,j+1)) &= -\frac{1}{\Delta y^2} + \frac{1}{2\Delta y}, \\
+        {\bf B(i,j)} &= f_{Nj},
+    \end{align*}
+    và bằng 0 trên các cột khác của ma trận ${\bf M}$, các thành phần khác của vector ${\bf B}$.
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    \textbf{Trường hợp 2:} Các điểm $P_{i1}, P_{iN}$ với $i=\overline{1,N}$, tương ứng với điều kiện Dirichlet. Khi đó dòng $(i,1)$ là vector dòng $N^2$ chiều (row vector) với giá trị $1$ tại cột $(i,1)$, và giá trị $0$ tại các cột còn lại, cụ thể
+    \begin{align*}
+        {\bf M}((i,1),(j,k)) &= \begin{cases}
+            1, \text{ nếu } j = i, k = 1, \\
+            0, \text{ trường hợp khác.}
+        \end{cases} \\
+        {\bf B}(i,j) &= \begin{cases}
+            1, \text{ nếu } j = 1, \\
+            0, \text{ nếu } j \ne 1.
+        \end{cases}
+    \end{align*}
+    Tương tự, dòng $(i,N)$ cũng là vector dòng $N^2$ chiều với giá trị $1$ tại cột $(i,N)$ và giá trị $0$ tại các cột còn lại.
+    \begin{align*}
+        {\bf M}((i,N),(j,k)) &= \begin{cases}
+            1, \text{ nếu } j = i, k = N, \\
+            0, \text{ trường hợp khác.}
+        \end{cases} \\
+        {\bf B}(i,j) &= \begin{cases}
+            1, \text{ nếu } j = N, \\
+            0, \text{ nếu } j \ne N.
+        \end{cases}
+    \end{align*}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    Các điểm $P_{i2}$ với $2 \le i \le N-1$, tương ứng với điều kiện Dirichlet. Ta áp dụng Công thức (\ref{deq:fdmeq:dirichlet:i2}). Khi đó
+    \begin{align*}
+        {\bf M}((i,2),(i,2)) &= \frac{2}{\Delta x^2} + \frac{2}{\Delta y^2} + c, \\
+        {\bf M}((i,2),(i-1,2)) &= -\frac{1}{\Delta x^2} - \frac{1}{2\Delta x}, \\
+        {\bf M}((i,2),(i+1,2)) &= -\frac{1}{\Delta x^2} + \frac{1}{2\Delta x}, \\
+        {\bf M}((i,2),(i,3)) &= -\frac{1}{\Delta y^2} + \frac{1}{2\Delta y}, \\
+        B(i,2) &= f_{i2} + \left(\frac{1}{\Delta y^2} + \frac{1}{2\Delta y}\right) g_2.
+    \end{align*}
+    và bằng 0 cho các trường hợp khác.
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    Các điểm $P_{i,N-1}$ với $2 \le i \le N-1$, tương ứng với điều kiện Dirichlet. Ta áp dụng Công thức (\ref{deq:fdmeq:dirichlet:iN}). Khi đó
+    \begin{align*}
+        {\bf M}((i,N-1),(i,N-1)) &= \frac{2}{\Delta x^2} + \frac{2}{\Delta y^2} + c, \\
+        {\bf M}((i,N-1),(i-1,N-1)) &= -\frac{1}{\Delta x^2} - \frac{1}{2\Delta x}, \\
+        {\bf M}((i,N-1),(i+1,N-1)) &= -\frac{1}{\Delta x^2} + \frac{1}{2\Delta x}, \\
+        {\bf M}((i,N-1),(i,N-2)) &= -\frac{1}{\Delta y^2} - \frac{1}{2\Delta y}, \\
+        B(i,N-1) &= f_{i,N-1} + \left(\frac{1}{\Delta y^2} - \frac{1}{2\Delta y}\right) g_4.
+    \end{align*}
+    và bằng 0 cho các trường hợp khác.
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    \textbf{Trường hợp 3:} Các điểm $P_{1j}$ tại với $j = \overline{2,N-1}$, tương ứng với điều kiện Neuman. \\
+    Với $3 \le j \le N-2$, ta áp dụng Công thức (\ref{deq:fdmeq:neuman}). Khi đó
+    \begin{align*}
+        {\bf M}((1,j),(1,j)) &= \frac{2}{\Delta x^2} + \frac{2}{\Delta y^2} + c, \\
+        {\bf M}((1,j),(2,j)) &= -\frac{2}{\Delta x^2}, \\
+        {\bf M}((1,j),(1,j-1)) &= -\frac{1}{\Delta y^2} - \frac{1}{2 \Delta y}, \\
+        {\bf M}((1,j),(1,j+1)) &= -\frac{1}{\Delta y^2} + \frac{1}{2\Delta y}, \\
+        {\bf B}(1,j) &= f_{1j} + \left(\frac{2}{\Delta x} + 1\right) g_1,
+    \end{align*},
+    và bằng 0 cho các trường hợp khác.
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    Với $j = 2$, tương ứng với điểm $P_{12}$. Ta áp dụng Công thức (\ref{deq:fdmeq:neuman:12}), ta được
+    \begin{align*}
+        {\bf M}((1,2),(1,2)) &= \frac{2}{\Delta x^2} + \frac{2}{\Delta y^2} + c, \\
+        {\bf M}((1,2),(2,2)) &= -\frac{2}{\Delta x^2}, \\
+        {\bf M}((1,2),(1,3)) &= -\frac{1}{\Delta y^2} + \frac{1}{2\Delta y}, \\
+        {\bf B(1,2)} &= f_{12} + \left(\frac{2}{\Delta x} + 1\right) g_1 + \left(\frac{1}{\Delta y^2} + \frac{1}{2\Delta y}\right) g_2,
+    \end{align*}
+    và bằng 0 cho các trường hợp khác.
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    Với $j = N-1$, tương ứng với điểm $P_{1,N-1}$. Ta áp dụng Công thức (\ref{deq:fdmeq:neuman:1N}), ta được
+    \begin{align*}
+        {\bf M}((1,N-1),(1,N-1)) &= \frac{2}{\Delta x^2} + \frac{2}{\Delta y^2} + c, \\
+        {\bf M}((1,N-1),(2,N-1)) &= -\frac{2}{\Delta x^2}, \\
+        {\bf M}((1,N-1),(1,N-2)) &= -\frac{1}{\Delta y^2} - \frac{1}{2 \Delta y}, \\
+        {\bf B}(1,N-1) &= f_{1,N-1} + \left(\frac{2}{\Delta x} + 1\right) g_1 + \left(\frac{1}{\Delta y^2} - \frac{1}{2\Delta y}\right) g_4,
+    \end{align*}
+    và bằng 0 cho các trường hợp khác.
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    \textbf{Trường hợp 4:} Các điểm $P_{Nj}$ với $j=\overline{2,N-1}$, tương ứng với điều kiện Robin. \\
+
+    Với $3 \le j \le N-2$, ta áp dụng Công thức (\ref{deq:fdmeq:robin}). Khi đó
+    \begin{align*}
+        {\bf M}((N,j),(N,j)) &= \frac{2}{\Delta x^2} + \frac{2}{\Delta y^2} + \frac{2\alpha}{\Delta x} - \alpha + c, \\
+        {\bf M}((N,j),(N-1,j)) &= -\frac{2}{\Delta x^2}, \\
+        {\bf M}((N,j),(N,j-1)) &= -\frac{1}{\Delta y^2} - \frac{1}{2\Delta y}, \\
+        {\bf M}((N,j),(N,j+1)) &= -\frac{1}{\Delta y^2} + \frac{1}{2\Delta y}, \\
+        {\bf B}(N,j) &= f_{Nj} + \left(\frac{2}{\Delta x} - 1\right) g_3,
+    \end{align*}
+    và bằng 0 trên các cột khác của ma trận ${\bf M}$, các thành phần khác của vector ${\bf B}$.
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    Với $j=2$, tương ứng điểm $P_{N2}$. Ta áp dụng Công thức (\ref{deq:fdmeq:robin:N1}), khi đó
+    \begin{align*}
+        {\bf M}((N,2),(N,2)) &= \frac{2}{\Delta x^2} + \frac{2}{\Delta y^2} + \frac{2\alpha}{\Delta x} - \alpha + c, \\
+        {\bf M}((N,2),(N-1,2)) &= -\frac{2}{\Delta x^2}, \\
+        {\bf M}((N,2),(N,3)) &= -\frac{1}{\Delta y^2} + \frac{1}{2\Delta y}, \\
+        {\bf B}(N,2) &= f_{N2} + \left(\frac{1}{\Delta y^2} + \frac{1}{2\Delta y}\right) g_2 + \left(\frac{2}{\Delta x} - 1\right) g_3,
+    \end{align*}
+    và bằng 0 cho các trường hợp khác.
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    Với $j=N-1$, tương ứng điểm $P_{N,N-1}$. Ta áp dụng Công thức (\ref{deq:fdmeq:robin:NN}), khi đó
+    \begin{align*}
+        {\bf M}((N,N-1),(N,N-1)) &= \frac{2}{\Delta x^2} + \frac{2}{\Delta y^2} + \frac{2\alpha}{\Delta x} - \alpha + c, \\
+        {\bf M}((N,N-1),(N-1,N-1)) &= -\frac{2}{\Delta x^2}, \\
+        {\bf M}((N,N-1),(N,N-2)) &= -\frac{1}{\Delta y^2} - \frac{1}{2\Delta y}, \\
+        {\bf B}(N,N-1) &= f_{Nj} + \left(\frac{2}{\Delta x} - 1\right) g_3 + \left(\frac{1}{\Delta y^2} - \frac{1}{2\Delta y}\right) g_4,
+    \end{align*}
+    và bằng 0 cho các trường hợp khác.
+\end{exampleblock}
+\end{frame}
+
+\section{Phương pháp sai phân hữu hạn cho Phương trình nhiệt}
+
+\subsection{Phương trình nhiệt trên không gian một chiều}
+
+\begin{frame}
+\begin{block}{Phương trình nhiệt trên không gian một chiều}
+        \textbf{Phương trình nhiệt} là phương trình đạo hàm riêng theo hai biến $x$ và $t$, trong đó biến $x$ là biến trong không gian một chiều, biến $t$ là biến thời gian.
+    \begin{align*}
+        \frac{\partial \phi}{\partial t} = \alpha \frac{\partial^2 \phi}{\partial x^2}, \  0 \le x \le L, t \ge 0.
+    \end{align*}
+    với $\alpha$ là hệ số hằng.
+\end{block}
+\end{frame}
+
+\begin{frame}
+\begin{block}{Bài toán}
+    Giải phương trình nhiệt bằng phương pháp sai phân hữu hạn
+    \begin{align}
+        \frac{\partial \phi}{\partial t} = \alpha \frac{\partial^2 \phi}{\partial x^2}, \  0 \le x \le L, t \ge 0, \label{deq:heat}
+    \end{align}
+    Phương trình (\ref{deq:heat}) có điều kiện biên
+    \begin{align*}
+        \phi(0,t) &= \phi_0, \\
+        \phi(L,t) &= \phi_L, \\
+        \phi(x,0) &= f_0(x).
+    \end{align*}
+    \begin{itemize}
+        \item (a) Dùng sai phân tiến cho biến thời gian, sai phân trung tâm cho biến không gian.
+        \item (b) Dùng sai lùi cho biến thời gian, sai phân trung tâm cho biến không gian.
+        \item (c) Dùng phương pháp Crank-Nicolson.
+    \end{itemize}
+\end{block}
+\end{frame}
+
+\subsection{Sai phân tiến cho thời gian, sai phân trung tâm cho không gian}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    (a) Ta thực hiện việc chia lưới cho hai biến $x$ và $t$. Đối với biến $x \in [0,L]$, ta chia thành
+    \begin{align*}
+        0 = x_1 \le x_2 \le \ldots \le x_N = L
+    \end{align*}
+    khi đó $x_i = (i-1) \Delta x$, với $i = \overline{1,N}, \Delta x = \frac{L}{N-1}$. \\
+
+    Đối với biến $t$, ta xác định một thời điểm $t_{\max}$, chia biến thời gian $t \in [0, t_{\max}$ thành $M$ điểm
+    \begin{align*}
+        0 = t_1 \le t_2 \le \ldots \le t_M = t_{\max}
+    \end{align*}
+    khi đó $t_m = (m-1) \Delta t$, với $m = \overline{1,M}, \Delta t = \frac{t_{\max}}{M-1}$.
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    Công thức sai phân tiến cho biến thời gian
+    \begin{align*}
+        \frac{\partial \phi}{\partial t}(x_i, t_m)
+        \approx \frac{\phi_i^{m+1} - \phi_i^m}{\Delta t}.
+    \end{align*}
+    Công thức sai phân trung tâm cho biến không gian
+    \begin{align*}
+        \frac{\partial^2 \phi}{\partial x^2}
+        \approx \frac{\phi_{i-1}^n - 2\phi_i^m + \phi_{i+1}^m}{\Delta x^2}.
+    \end{align*}
+    trong đó $\phi_i^m$ là giá trị xấp xỉ của $\phi(x_i, t_m)$. Thế các công thức sai phân vào Phương trình nhiệt (\ref{deq:heat}), ta được
+    \begin{align*}
+        \frac{\phi_i^{m+1} - \phi_i^m}{\Delta t} =
+        \alpha \frac{\phi_{i-1}^m - 2\phi_i^m + \phi_{i+1}^m}{\Delta x^2}
+    \end{align*}
+    tương đương
+    \begin{align*}
+        \phi_i^{m+1} = \phi_i^m + \frac{\alpha \Delta t}{\Delta x^2} \left(\phi_{i-1}^m - 2\phi_i^m + \phi_{i+1}^m\right).
+    \end{align*}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    Đặt $r = \frac{\alpha \Delta t}{\Delta x^2}$, ta được
+    \begin{align}
+        \phi_i^{m+1} = \phi_i^m + r\left(\phi_{i-1}^m - 2\phi_i^m + \phi_{i+1}^m\right). \label{deq:heat:ftcs}
+    \end{align}
+    Điều kiện biên được viết lại thành
+    \begin{align*}
+        \phi(0, t_m) = \phi_0^m, \phi(L, t_m) = \phi_L^m.
+    \end{align*}
+    Điều kiện đầu được viết lại thành
+    \begin{align*}
+        \phi(x_i, 0) = \phi_i^0 = f_0(x_i).
+    \end{align*}
+    Đặt
+    \begin{align*}
+        \phi^{(m)} = (\phi_1^m, \ldots, \phi_N^m)^T.
+    \end{align*}
+    Tại điều kiện đầu $m = 0$
+    \begin{align*}
+        \phi^{(0)} = (\phi_1^0, \ldots, \phi_N^0)^T = (f_0(x_1), \ldots, f_0(x_N))^T.
+    \end{align*}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    Khi đó ta có công thức ma trận
+    \begin{align*}
+        \phi^{(m+1)} = {\bf A} \phi^{(m)}
+    \end{align*}
+    trong đó
+    \begin{align*}
+        {\bf A} = \begin{pmatrix}
+        1 & 0 & 0 & 0 & \ldots & 0 & 0 & 0 \\
+        r & 1-2r & r & 0 & \ldots & 0 & 0 & 0 \\
+        0 & r & 1-2r & r & \ldots & 0 & 0 & 0 \\
+        \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots \\
+        0 & 0 & 0 & 0 & \ldots & r & 1-2r & r \\
+        0 & 0 & 0 & 0 & \ldots & 0 & 0 & 1
+        \end{pmatrix}.
+    \end{align*}
+\end{exampleblock}
+\end{frame}
+
+\subsection{Sai phân lùi cho thời gian, sai phân trung tâm cho không gian}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    (b) Công thức sai phân lùi cho biến thời gian
+    \begin{align*}
+        \frac{\partial \phi}{\partial t}(x_i, t_m)
+        \approx \frac{\phi_i^m - \phi_i^{m-1}}{\Delta t}
+    \end{align*}
+    Công thức sai phân trung tâm cho biến không gian
+    \begin{align*}
+        \frac{\partial^2 \phi}{\partial x^2}
+        \approx \frac{\phi_{i-1}^n - 2\phi_i^m + \phi_{i+1}^m}{\Delta x^2}.
+    \end{align*}
+    Khi đó Phương trình (\ref{deq:heat}) trở thành
+    \begin{align*}
+        \frac{\phi_i^m - \phi_i^{m-1}}{\Delta t} =
+        \alpha \frac{\phi_{i-1}^m - 2\phi_i^m + \phi_{i+1}^m}{\Delta x^2}
+    \end{align*}
+    tương đương
+    \begin{align*}
+        \left(-\frac{\alpha}{\Delta x^2}\right) \phi_{i-1}^m +
+        \left(\frac{1}{\Delta t} + \frac{2\alpha}{\Delta x^2}\right) \phi_i^m +
+        \left(-\frac{\alpha}{\Delta x^2}\right) \phi_{i+1}^m =
+        \frac{1}{\Delta t} \phi_i^{m-1}.
+    \end{align*}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    Đặt $r = \frac{\alpha \Delta t}{\Delta x^2}$, ta được
+    \begin{align}
+        -r\phi_{i-1}^m + (1 + 2r)\phi_i^m - r\phi_{i+1}^m = \phi_i^{m-1}. \label{deq:heat:btcs}
+    \end{align}
+    Khi đó ta có công thức ma trận
+    \begin{align*}
+        {\bf B}\phi^{(m)} = \phi^{(m-1)}.
+    \end{align*}
+    trong đó
+    \begin{align*}
+        {\bf B} = \begin{pmatrix}
+        1 & 0 & 0 & 0 & \ldots & 0 & 0 & 0 \\
+        -r & 1+2r & -r & 0 & \ldots & 0 & 0 & 0 \\
+        0 & -r & 1+2r & -r & \ldots & 0 & 0 & 0 \\
+        \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots \\
+        0 & 0 & 0 & 0 & \ldots & -r & 1+2r & -r \\
+        0 & 0 & 0 & 0 & \ldots & 0 & 0 & 1 
+        \end{pmatrix}.
+    \end{align*}
+\end{exampleblock}
+\end{frame}
+
+\subsection{Phương pháp Crank-Nicolson}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    (c) Phương pháp Crank-Nicolson tương tự như Phần (b), vế trái của Phương trình (\ref{deq:heat}) sử dụng công thức sai phân lùi. Tuy nhiên, vế phải của (\ref{deq:heat}) sử dụng trung bình cộng của hai công thức sai phân trung tâm, một công thức trung tâm cho thời điểm $t_m$, một công thức trung tâm cho thời điểm $t_{m-1}$. Cụ thể, phương trình (\ref{deq:heat}) được viết lại như sau
+    \begin{align*}
+        \frac{\phi_i^m - \phi_i^{m-1}}{\Delta t} =
+        \frac{\alpha}{2} \left(
+        \frac{\phi_{i-1}^m - 2\phi_i^m + \phi_{i+1}^m}{\Delta x^2} +
+        \frac{\phi_{i-1}^{m-1} - 2\phi_i^{m-1} + \phi_{i+1}^{m-1}}{\Delta x^2}
+        \right)
+    \end{align*}
+    tương đương
+    \begin{align*}
+        \left(-\frac{\alpha}{2\Delta x^2}\right) \phi_{i-1}^m &+
+        \left(\frac{1}{\Delta t} + \frac{\alpha}{\Delta x^2}\right) \phi_i^m +
+        \left(-\frac{\alpha}{2\Delta x^2}\right) \phi_{i+1}^m \nonumber \\ &=
+        \frac{\alpha}{2\Delta x^2} \phi_{i-1}^{m-1} +
+        \left(\frac{1}{\Delta t} - \frac{\alpha}{\Delta x^2}\right) \phi_i^{m-1} +
+        \frac{\alpha}{2\Delta x^2} \phi_{i+1}^{m-1}.
+    \end{align*}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    Đặt $r = \frac{\alpha \Delta t}{2\Delta x^2}$, ta được
+    \begin{align}
+        -r\phi_{i-1}^m + (1+2r)\phi_i^m -r\phi_{i+1}^m = r\phi_{i-1}^{m-1} + (1-2r)\phi_i^{m-1} + r\phi_{i+1}^{m-1}. \label{deq:heat:cn}
+    \end{align}
+    Công thức ma trận
+    \begin{align*}
+        {\bf B} \phi^{(m)} = {\bf A} \phi^{(m-1)}
+    \end{align*}
+    trong đó ma trận ${\bf A}$ giống Phần (a), ma trận ${\bf B}$ giống Phần (b).
+\end{exampleblock}
+\end{frame}
+
+\section{Đánh giá Phương trình nhiệt}
+
+\subsection{Biến đổi Fourier rời rạc và tính ổn định}
+
+\begin{frame}
+\begin{block}{Định nghĩa Biến đổi Fourier rời rạc}
+Nếu $\ldots, v_{-2}, v_{-1}, v_0, v_1, v_2, \ldots$ là các giá trị của hàm liên tục $v(x)$ tại $x_i = ih$. Khi đó \textbf{biến đổi Fourier rời rạc} được định nghĩa như sau
+\begin{align*}
+    \hat{v}(\xi) = \frac{1}{\sqrt{2\pi}} \sum_{j=-\infty}^\infty h e^{-i\xi jh} v_j.
+\end{align*}
+\end{block}
+
+\begin{exampleblock}{Nhận xét}
+    $\hat{v}(\xi)$ là hàm liên tục và tuần hoàn với chu kỳ $2\pi/h$
+    \begin{align*}
+        e^{-ijh(\xi+2\pi/h)} = e^{-ijh\xi} . e^{2ij\pi} = e^{-ijh\xi}.
+    \end{align*}
+    Do đó ta chỉ cần xét hàm $\hat{v}(\xi)$ trên đoạn $[-\pi/h, \pi/h]$.
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{block}{Định nghĩa Biến đổi Fourier rời rạc ngược}
+    \textbf{Biến đổi Fourier rời rạc ngược} là
+    \begin{align*}
+        v_j = \frac{1}{\sqrt{2\pi}} \int_{-\pi/h}^{\pi/h} e^{i\xi jh} \hat{v}(\xi) d\xi.
+    \end{align*}
+\end{block}
+
+\begin{exampleblock}{Nhận xét}
+    Cho dãy hữu hạn không liên quan đến $h$,
+    \begin{align*}
+        v_1, v_2, \ldots, v_M,
+    \end{align*}
+    ta có thể mở rộng dãy hữu hạn thành dãy vô hạn như sau
+    \begin{align*}
+        \ldots, 0, 0, v_1, v_2, \ldots, v_M, 0, 0, \ldots
+    \end{align*}
+    Khi đó biến đổi Fourier rời rạc được tính như sau
+    \begin{align*}
+        \hat{v}(\xi) &= \frac{1}{\sqrt{2\pi}} \sum_{j=-\infty}^\infty e^{-i\xi j} v_j = \sum_{j=0}^M e^{-i\xi j} v_j.
+    \end{align*}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Nhận xét}
+    Biến đổi Fourier rời rạc ngược được tính như sau
+    \begin{align*}
+        v_j &= \frac{1}{\sqrt{2\pi}} \int_{-\pi}^\pi e^{i\xi j} \hat{v}(\xi) d\xi.
+    \end{align*}
+\end{exampleblock}
+
+\begin{block}{Định nghĩa Chuẩn rời rạc}
+   \textbf{Chuẩn rời rạc} của {\bf v} là
+   \begin{align*}
+       \|{\bf v}\|_h = \left(\sum_{j=-\infty}^\infty v_j^2 h\right)^\frac{1}{2}.
+   \end{align*}
+   Ta thường sử dụng $\|{\bf v}\|_2$ là kí hiệu khác của chuẩn rời rạc.
+\end{block}
+
+\begin{block}{Định lý Parseval}
+    $$\|\hat{v}\|_h^2 = \int_{-pi/h}^{\pi/h} |\hat{v}(\xi)|^2 d\xi = \sum_{j=-\infty}^\infty h|v_j|^2 = \|v\|_h^2.$$
+\end{block}
+\end{frame}
+
+\begin{frame}
+\begin{block}{Định nghĩa Tính ổn định}
+    Phương pháp sai phân $P_{\Delta t, h} v_j^k = 0$ có tính ổn định trong miền $\Lambda$ nếu với mọi số dượng $T$ tồn tại số nguyên $J$ và hệ số $C_T$ phụ thuộc $\Delta t$ và $h$ thoả mãn
+    \begin{align*}
+        \|{\bf v}^n\|_h \le C_T \sum_{j=0}^J \|{\bf v}^j\|_h,
+    \end{align*}
+    với mọi $n$ thoả $0 \le n \Delta t \le T$, với $(\Delta t, h) \in \Lambda$.
+\end{block}
+
+\begin{block}{Định lý}
+    Nếu $\|{\bf v}^{k+1}\|_h \le \|{\bf v}^k\|_h$ với mọi $k$, thì phương pháp sai phân có tính ổn định.
+\end{block}
+
+\begin{exampleblock}{Chứng minh}
+    Ta có
+    \begin{align*}
+        \|{\bf v}^n\|_h \le \|{\bf v}^{n-1}\|_h \le \ldots \le |{\bf v}^0\|_h,
+    \end{align*}
+    suy ra tính ổn định với $J=0, C_T = 1$.
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{block}{Định lý Tính ổn định von Neumann}
+    Xét công thức sai phân ${\bf U}^{k+1} = f({\bf U}^k, {\bf U}^{k+1})$. Cho $\theta = h\xi$. Phương pháp sai phân có tính ổn định khi và chỉ khi tồn tại hằng số $K$ (độc lập với $\theta, \Delta t$ và $h$) và số dương $\Delta t_0$ và $h_0$ thoả mãn
+    \begin{align}
+        |g(\theta, \Delta t, h)| \le 1 + K \Delta t \label{deq:vonneuman}
+    \end{align}
+    với mọi $\theta$ và $0 < h \le h_0$. Nếu $g(\theta, \Delta t, h)$ độc lập với $h$ và $\Delta t$, thì điều kiện ổn định (\ref{deq:vonneuman}) được thay thế thành
+    \begin{align*}
+        |g(\theta)| \le 1.
+    \end{align*}
+\end{block}
+
+\begin{exampleblock}{Nhận xét}
+    Các bước kiểm tra tính ổn định bằng phương pháp von Neumann
+    \begin{itemize}
+        \item (1) Đặt $U_{j}^k = e^{ijh\xi}$ và thay thế vào công thức sai phân.
+        \item (2) Biểu diễn $U_{j}^{k+1}$ bằng cách đặt $U_{j}^{k+1} = g(\xi)e^{ijh\xi}$.
+        \item (3) Tìm công thức nghiệm $g(\xi)$ và xác định khi nào $|g(\xi)| \le 1$.
+        \item (4) Nếu tồn tại $\xi$ để $|g(\xi)| > 1$, khi đó phương pháp không ổn định.
+    \end{itemize}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{block}{Bài toán}
+    Cho phương trình nhiệt
+    \begin{align*}
+        \frac{\partial \phi}{\partial t} = \alpha \frac{\partial^2 \phi}{\partial x^2}.
+    \end{align*}
+    \begin{itemize}
+        \item (a) Chứng minh phương pháp sai phân tiến theo thời gian, sai phân trung tâm theo không gian là không ổn định. Xác định điều kiện để phương pháp có tính ổn định.
+        \item (b) Chứng minh phương pháp sai phân lùi theo thời gian, sai phân trung tâm theo không gian có tính ổn định.
+    \end{itemize}
+\end{block}
+
+\begin{exampleblock}{Bài giải}
+    Ta viết lại Công thức (\ref{deq:heat:ftcs})
+    \begin{align*}
+        \phi_j^{m+1} = \phi_j^m + r\left(\phi_{j-1}^m - 2\phi_j^m + \phi_{j+1}^m\right)
+    \end{align*}
+    với $r = \frac{\alpha \Delta t}{\Delta x^2}$.
+    Đặt $\phi_j^m = e^{ij\Delta x \xi}$ và $\phi_j^{m+1} = g(\xi) e^{ij\Delta x \xi}$, thế vào Công thức (\ref{deq:heat:ftcs})
+    \begin{align*}
+        g(\xi) e^{ij\Delta x \xi} = e^{ij\Delta x \xi} + r\left(e^{i(j-1)\Delta x \xi} - 2e^{ij\Delta x \xi} + e^{i(j+1)\Delta x \xi}\right)
+    \end{align*}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    tương đương
+    \begin{align*}
+        g(\xi) e^{ij\Delta x \xi} = e^{ij\Delta x \xi} \left(1 + r\left( e^{-i\Delta x \xi} - 2 + e^{i\Delta x \xi} \right)\right)
+    \end{align*}
+    suy ra
+    \begin{align*}
+        g(\xi) &= 1 + r\left( e^{-i\Delta x \xi} - 2 + e^{i\Delta x \xi} \right) \\
+        &= 1 + r\left( \cos(-\xi \Delta x) + i \sin(-\xi \Delta x) - 2 + \cos(\xi \Delta x) + i \sin(\xi \Delta x) \right) \\
+        &= 1 + 2r\left(\cos(\xi \Delta x) - 1\right)
+        = 1 - 4r\sin^2 \frac{\xi \Delta x}{2}.
+    \end{align*}
+    Ta thấy $1-4r \le g(\xi) \le 1$, do đó để $|g(\xi)| \le 1$ thì ta cần $1-4r \ge 1$, hay
+    \begin{align}
+        \frac{\alpha \Delta t}{\Delta x^2} = r \le \frac{1}{2} \Leftrightarrow
+        \Delta t \le \frac{\Delta x^2}{2\alpha} \label{deq:heat:ftcs:cond}
+    \end{align}
+    Ta kết luận, phương pháp sai phân tiến theo thời gian là không ổn định, để phương pháp có tính ổn định ta cần có điều kiện (\ref{deq:heat:ftcs:cond}).
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    (b) Từ Công thức (\ref{deq:heat:btcs}), ta có
+    \begin{align*}
+        \phi_j^m &= r\phi_{j-1}^{m+1} + (1+2r)\phi_j^{m+1} - r\phi_{j+1}^{m+1} \\
+        &= \phi_j^{m+1} - r\left( \phi_{j-1}^{m+1} - 2\phi_j^{m+1} + \phi_{j+1}^{m+1} \right).
+    \end{align*}
+    Đặt $\phi_j^m = e^{ij\Delta x \xi}$ và $\phi_j^{m+1} = g(\xi) e^{ij\Delta x \xi}$, thế vào công thức trên
+    \begin{align*}
+        e^{ij\Delta x \xi}
+        &= g(\xi)e^{ij\Delta x \xi}\left(1 - r\left(e^{-i\Delta x\xi} - 2 + e^{i\Delta x\xi}\right)\right) \\
+        &= g(\xi)e^{ij\Delta x \xi}\left(1 + 2r\sin^2 \frac{\Delta x\xi}{2}\right).
+    \end{align*}
+    suy ra
+    \begin{align*}
+        g(\xi) = \frac{1}{1 + 2r\sin^2 (\Delta x\xi / 2)}.
+    \end{align*}
+    Khi đó $-1 < 0 \le g(\xi) \le 1$, hay $|g(\xi)| \le 1$, dẫn đến phương pháp sai phân lùi theo thời gian là ổn định, không phụ thuộc vào $\Delta x$ và $\Delta t$.
+\end{exampleblock}
+\end{frame}
+
+\subsection{Phương pháp ADI và tính hội tụ}
+
+\begin{frame}
+\begin{block}{Bài toán}
+Cho phương trình nhiệt
+\begin{align}
+    u_t = u_{xx} + u_{yy} + f(x,y,t) \label{deq:heat:2vars}
+\end{align}
+với $u(x,y,t) \in C^4(\Omega)$. Sử dụng phương pháp ADI để chứng tỏ rằng Phương trình (\ref{deq:heat:2vars}) có tính hội tụ.
+\end{block}
+
+\begin{exampleblock}{Bài giải}
+    Gọi $U_{ij}^k$ là giá trị xấp xỉ của Phương trình (\ref{deq:heat:2vars}) bằng phương pháp sai phân trung tâm tại ví trí $P_{ij}$ và tại thời điểm $k$. Áp dụng công thức sai phân trung tâm cho $U_{ij}^{k}, U_{ij}^{k + \frac{1}{2}}$ và $ U_{ij}^{k+1}$
+    \begin{align*}
+        \frac{U_{ij}^{k+\frac{1}{2}} - U_{ij}^k}{(\Delta t)/2} &=
+        \frac{U_{i-1,j}^{k+\frac{1}{2}} - 2U_{ij}^{k+\frac{1}{2}} + U_{i+1,j}^{k+\frac{1}{2}}}{h_x^2} + \frac{U_{i,j-1}^k - 2U_{ij}^k + U_{i,j+1}^k}{h_y^2} + f_{ij}^{k+\frac{1}{2}}, \\
+        \frac{U_{ij}^{k+1} - U_{ij}^{k+\frac{1}{2}}}{(\Delta t)/2} &=
+        \frac{U_{i-1,j}^{k+\frac{1}{2}} - 2U_{ij}^{k+\frac{1}{2}} + U_{i+1,j}^{k+\frac{1}{2}}}{h_x^2} + \frac{U_{i,j-1}^{k+1} - 2U_{ij}^{k+1} + U_{i,j+1}^{k+1}}{h_y^2} + f_{ij}^{k+\frac{1}{2}}.
+    \end{align*}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    Ta sử dụng kí hiệu $\delta_{xx}^2$, $\delta_{yy}^2$ cho công thức sai phân trung tâm, khi đó ta viết lại biểu thức lại thành
+    \begin{align}
+        U_{ij}^{k+\frac{1}{2}} &= U_{ij}^k +
+        \frac{\Delta t}{2} \delta_{xx}^2 U_{ij}^{k+\frac{1}{2}} +
+        \frac{\Delta t}{2} \delta_{yy}^2 U_{ij}^k +
+        \frac{\Delta t}{2} f_{ij}^{k+\frac{1}{2}}, \label{deq:adi:cdf1} \\
+        U_{ij}^{k+1} &= U_{ij}^{k+\frac{1}{2}} +
+        \frac{\Delta t}{2} \delta_{xx}^2 U_{ij}^{k+\frac{1}{2}} +
+        \frac{\Delta t}{2} \delta_{yy}^2 U_{ij}^{k+1} +
+        \frac{\Delta t}{2} f_{ij}^{k+\frac{1}{2}}. \label{deq:adi:cdf2}
+    \end{align}
+    Công thức dưới dạng ma trận
+    \begin{align}
+        \left({\bf I} - \frac{\Delta t}{2} D_x^2\right) {\bf U}^{k+\frac{1}{2}} &=
+        \left(I + \frac{\Delta t}{2} D_y^2\right) {\bf U}^k +
+        \frac{\Delta t}{2} {\bf F}^{k+\frac{1}{2}}, \label{deq:adi:matrix1} \\
+        \left({\bf I} - \frac{\Delta t}{2} D_y^2\right) {\bf U}^{k+1} &=
+        \left(I + \frac{\Delta t}{2} D_x^2\right) {\bf U}^{k+\frac{1}{2}} +
+        \frac{\Delta t}{2} {\bf F}^{k+\frac{1 }{2}}. \label{deq:ad:matrix2}
+    \end{align}
+    Phương trình (\ref{deq:adi:matrix1}) dẫn đến
+    \begin{align*}
+        {\bf U}^{k+\frac{1}{2}} &=
+        \left({\bf I} - \frac{\Delta t}{2} D_x^2\right)^{-1} \left(I + \frac{\Delta t}{2} D_y^2\right) {\bf U}^k +
+        \left({\bf I} - \frac{\Delta t}{2} D_x^2\right)^{-1} \frac{\Delta t}{2} {\bf F}^{k+\frac{1}{2}}
+    \end{align*}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    Thế ${\bf U}^{k+\frac{1}{2}}$ vào Phương trình (\ref{deq:ad:matrix2}), ta được
+    \begin{align*}
+        \left({\bf I} - \frac{\Delta t}{2} D_y^2\right) {\bf U}^{k+1} &=
+        \left(I + \frac{\Delta t}{2} D_x^2\right) \left({\bf I} - \frac{\Delta t}{2} D_x^2\right)^{-1} \left(I + \frac{\Delta t}{2} D_y^2\right) {\bf U}^k \\ &+
+        \left(I + \frac{\Delta t}{2} D_x^2\right) \left({\bf I} - \frac{\Delta t}{2} D_x^2\right)^{-1} \frac{\Delta t}{2} {\bf F}^{k+\frac{1}{2}} +
+        \frac{\Delta t}{2} {\bf F}^{k+\frac{1 }{2}}. 
+    \end{align*}
+    kéo theo
+    \begin{align}
+        \left({\bf I} - \frac{\Delta t}{2} D_x^2\right) \left({\bf I} - \frac{\Delta t}{2} D_y^2\right) {\bf U}^{k+1} &=
+        \left(I + \frac{\Delta t}{2} D_x^2\right) \left(I + \frac{\Delta t}{2} D_y^2\right) {\bf U}^k \nonumber \\ &+
+        \left(I + \frac{\Delta t}{2} D_x^2\right) \frac{\Delta t}{2} {\bf F}^{k+\frac{1}{2}} + \frac{\Delta t}{2} {\bf F}^{k+\frac{1}{2}} \label{deq:adi:eq}
+    \end{align}
+    Trong biểu thức trên có sử dụng đẳng thức sau
+    \begin{align*}
+        \left(I + \frac{\Delta t}{2} D_x^2\right) \left(I + \frac{\Delta t}{2} D_y^2\right) =
+        \left(I + \frac{\Delta t}{2} D_y^2\right) \left(I + \frac{\Delta t}{2} D_x^2\right)
+    \end{align*}
+    và các toán tử giao hoán khác.
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    Cộng hai vế (\ref{deq:adi:cdf1}) và (\ref{deq:adi:cdf2})
+    \begin{align}
+        \frac{U_{ij}^{k+1} - U_{ij}^k}{(\Delta t)/2} =
+        2\delta_{xx}^2 U_{ij}^{k+\frac{1}{2}} +
+        \delta_{yy}\left(U_{ij}^{k+1} - U_{ij}^k\right) +
+        2 f_{ij}^{k+\frac{1}{2}}. \label{deq:adi:cons:add}
+    \end{align}
+    Trừ hai vế của (\ref{deq:adi:cdf1}) và (\ref{deq:adi:cdf2})
+    \begin{align}
+        4U_{ij}^{k+\frac{1}{2}} =
+        2\left(U_{ij}^{k+1} - U_{ij}^k\right) -
+        \Delta t \delta_{yy}^2 \left(U_{ij}^{k+1} - U_{ij}^k\right). \label{deq:adi:cons:subtract}
+    \end{align}
+    Thế (\ref{deq:adi:cons:subtract}) vào (\ref{deq:adi:cons:add}) ta được
+    \begin{align*}
+        \left(1 + \frac{\Delta t^4}{4} \delta_{xx}^2 \delta_{yy}^2\right) \frac{U_{ij}^{k+1} - U_{ij}^k}{\Delta t} =
+        \left(\delta_{xx}^2 + \delta_{yy}^2\right) \frac{U_{ij}^{k+1} - U_{ij}^k}{2} + f_{ij}^{k+\frac{1}{2}}.
+    \end{align*}
+    Từ đó suy ra phương pháp ADI có tính nhất quán, và có bậc hội tụ là 2 cho cả hai biến không gian và thời gian.
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    Cho $f = 0$ và đặt
+    \begin{align*}
+        {\bf U}_{lj}^k &= e^{i(\xi_1 h_1 l + \xi_2 h_2 j)}, \\
+        {\bf U}_{lj}^{k+1} &= g(\xi_1, \xi_2) e^{i(\xi_1 h_1 l + \xi_2 h_2 j)}.
+    \end{align*}
+    Từ Phương trình (\ref{deq:adi:eq}), ta được
+    \begin{align*}
+        \left(1 - \frac{\Delta t}{2} \delta_{xx}^2\right) \left(1 - \frac{\Delta t}{2} \delta_{yy}^2\right) {\bf U}_{lj}^{k+1} =
+        \left(1 + \frac{\Delta t}{2} \delta_{xx}^2\right) \left(1 + \frac{\Delta t}{2} \delta_{yy}^2\right) {\bf U}_{lj}^k
+    \end{align*}
+    Thế ${\bf U}_{lj}^k, {\bf U}_{lj}^{k+1}$ ta được
+    \begin{align*}
+        \left(1 - \frac{\Delta t}{2} \delta_{xx}^2\right) \left(1 - \frac{\Delta t}{2} \delta_{yy}^2\right) &g(\xi_1, \xi_2) e^{i(\xi_1 h_1 l + \xi_2 h_2 j)} \\&=
+        \left(1 + \frac{\Delta t}{2} \delta_{xx}^2\right) \left(1 + \frac{\Delta t}{2} \delta_{yy}^2\right) e^{i(\xi_1 h_1 l + \xi_2 h_2 j)}
+    \end{align*}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\begin{exampleblock}{Bài giải}
+    suy ra
+    \begin{align*}
+        g(\xi_1, \xi_2) =
+        \frac{\left(
+            1 - 4 \mu \sin^2 \left(\xi_1 h/2\right)
+        \right)\left(
+            1 - 4 \mu \sin^2 \left(\xi_2 h/2\right)
+        \right)}
+        {\left(
+            1 + 4 \mu \sin^2 \left(\xi_1 h/2\right)
+        \right)\left(
+            1 + 4 \mu \sin^2 \left(\xi_2 h/2\right)
+        \right)}
+    \end{align*}
+    với $\mu = \frac{\Delta t}{2h^2}$, $h_x = h_y = h$. Do đó $|g(\xi_1, \xi_2)| \le 1$, suy ra phương pháp ADI ổn định. \\
+
+    Cuối cùng, do phương pháp ADI vừa có tính nhất quát, vừa có tính hội tụ, nên phương pháp ADI có tính hội tụ.
+\end{exampleblock}
+\end{frame}
+
+\section{}
+
+\begin{frame}
+    \begin{center}
+        \Huge {\bf Cảm ơn thầy và các bạn đã theo dõi!}
+    \end{center}
+\end{frame}
+
+\end{document}
