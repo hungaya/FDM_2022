@@ -1,0 +1,551 @@
+\documentclass[9pt]{beamer}
+\usepackage[utf8]{vietnam}
+%----------Packages----------
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{framed,color}
+\usepackage{esint}
+\usepackage{amsthm}
+%\usepackage{amsrefs}
+\usepackage{dsfont}
+\usepackage{color}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage[all]{xy}
+\usepackage[mathscr]{eucal}
+\usepackage{verbatim}  %%includes comment environmenthttps://www.overleaf.com/7333733538cgxrxfpzqxhk
+\usepackage{hyperref}
+\usepackage[scr]{rsfso}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usepackage{graphicx}
+
+\usepackage[
+backend=biber,
+style=alphabetic,
+sorting=ynt
+]{biblatex}
+\addbibresource{references.bib}
+
+
+%---------math operators------
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator\supp{supp}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\sets}{\mathbf{Sets}}
+\DeclareMathOperator{\topbf}{\mathbf{Top}}
+\DeclareMathOperator{\topbfast}{\mathbf{Top_\ast}}
+\DeclareMathOperator{\grp}{\mathbf{Groups}}
+\DeclareMathOperator{\obj}{obj}
+\DeclareMathOperator{\id}{Id}
+\DeclareMathOperator{\esssup}{esssup}
+\DeclareMathOperator{\sgn}{sgn}
+
+\mode<presentation>
+{
+  \usetheme{Warsaw}      % or try Darmstadt, Madrid, Warsaw, ...
+  \usecolortheme{whale} % or try albatross, beaver, crane, ...
+  \usefonttheme{default}  % or try serif, structurebold, ...
+  \setbeamertemplate{navigation symbols}{}
+  \setbeamertemplate{caption}[numbered]
+}
+
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Mục lục}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+\title[Giải tích sai phân hữu hạn]{Giải tích sai phân hữu hạn}
+\author{Đỗ Sỹ Hưng}
+\institute{Trường Đại học Khoa học Tự nhiên, ĐHQG TP.HCM}
+\date{Ngày 20 tháng 11 năm 2022}
+
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+%---------------------------------------------------
+%---------------------------------------------------
+
+% \begin{frame}[plain]
+% 	\tableofcontents
+% \end{frame}
+% Uncomment these lines for an automatically generated outline.
+\begin{frame}{Mục lục}
+ \tableofcontents
+\end{frame}
+
+
+%---------------------------------------------------
+%---------------------------------------------------
+\section{Bài tập lần 1}
+
+\subsection{Bài 1}
+
+\begin{frame}
+    \begin{block}{Bài 1}
+    Cho đa thức
+    \begin{align*}
+        P_n(x) = a_n x^n + a_{n-1} x^{n-1} + \ldots + a_1 x + a_0,
+    \end{align*}
+    với $a_i \in \mathbb{R}$ và $a_n \neq 0$. Chứng minh $P_n(x) = O(x^m)$ khi và chỉ khi $m \ge n$.
+    \end{block}
+    \begin{exampleblock}{Chứng minh}
+    (\Leftarrow) Cho $\ m \ge n$, khi đó với $x > 1$
+    \begin{align*}
+        |P_n(x)| &= |a_n x^n + a_{n-1} x^{n-1} + \ldots + a_1 x + a_0| \\
+        &\le |a_n||x|^n + |a_{n-1}||x|^{n-1} + \ldots + |a_1||x| + |a_0| \\
+        &= |a_n| x^n + |a_{n-1}| x^{n-1} + \ldots + |a_1| x + |a_0| \\
+        &\le |a_n| x^m + |a_{n-1}| x^m + \ldots + |a_1| x^m + |a_0| x^m \\
+        &= (|a_n| + |a_{n-1}| + \ldots + |a_1| + |a_0|) x^m.
+    \end{align*}
+    Đặt $M := \sum_{i=1}^n |a_i|$, ta được $|P_n(x)| \le M x^m$, suy ra $P_n(x) = O(x^m)$.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}
+    \begin{exampleblock}{Chứng minh}
+    $(\Rightarrow)$ Ta sử dụng phản chứng, giả sử $P_n(x) = O(x^m)$ nhưng $m < n$. Xét một đa thức cụ thể của $P_n(x)$ có dạng
+    \begin{align*}
+        P_n(x) = a_n x^n, \quad a_n \neq 0
+    \end{align*}
+    nghĩa là các hệ số $a_i = 0, \forall i = \overline{1,n-1}$. \\
+    \noindent Khi đó tồn tại hai số $M, k > 0$ sao cho
+    \begin{align*}
+        |P_n(x)| = |a_n| x^n \le M x^m \text{ khi } x > k,
+    \end{align*}
+    tương đương với
+    \begin{align*}
+        x^{n-m} &\le \frac{M}{|a_n|} \text { khi } x > k \\
+        x &\le \left(\frac{M}{|a_n|}\right)^{\frac{1}{n-m}} \text { khi } x > k.
+    \end{align*}
+    Điều này vô lý với điều kiện $x > k$, do đó $m \ge n. \hfill \qed$
+    \end{exampleblock}
+\end{frame}
+
+\subsection{Bài 2}
+
+\begin{frame}
+    \begin{block}{Bài 2}
+    \begin{enumerate}[label=(\roman*)]
+        \item Cho $1 < a < b$, chứng minh $x^a = O(x^b)$, nhưng $x^b$ không là $O(x^a)$.
+        \item Cho $b > 1$, $\log_b x = O(x)$, nhưng $x$ không là $O(\log_b x)$.
+    \end{enumerate}
+    \end{block}
+    
+    \begin{exampleblock}{Chứng minh}
+    (i) Cho $x > 1$, ta có $|x^a| = x^a \le x^b = 1.x^b$ suy ra $x^a = O(x^b)$. \\
+    \noindent Giả sử $x^b = O(x^a)$, tồn tại $M, k > 0$ sao cho
+    \begin{align*}
+        x^b = |x|^b = |x^b| \le M x^a \text{ khi } x > k
+    \end{align*}
+    tương đương với
+    \begin{align*}
+        & x^{b-a} \le M \text{ khi } x > k \\
+        & x \le M^{\frac{1}{b-a}} \text{ khi } x > k.
+    \end{align*}
+    Điều trên mâu thuẫn, do đó $x^b$ không là $O(x^a)$.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}
+    \begin{exampleblock}{Chứng minh}
+    (ii) Cho $x > 1$, Xét hàm số $f(x) = Mx - \log_b x$ trên miền xác định $(1, \infty)$, với $M > 0$ được chọn sau. Khi đó
+    \begin{align*}
+        f'(x) = M - \frac{1}{x \ln b} > M - \frac{1}{\ln b}.
+    \end{align*}
+    Ta chọn $M$ đủ lớn để $M - (1/ \ln b) > 0$, kéo theo $f'(x) > 0$, hàm $f$ đồng biến trên $(1, \infty)$, nên với $x > 1$
+    \begin{align*}
+        Mx - \log_b x = f(x) > f(1) = M - \log_b 1 = M > 0,
+    \end{align*}
+    dẫn đến $\log_b x < Mx$ khi $x > 1$, kéo theo $\log_b x = O(x)$.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}
+    \begin{exampleblock}{Chứng minh}
+    Giả sử $x = O(\log_b x)$, tồn tại $M, k > 0$ sao cho
+    \begin{align*}
+        x \le M \log_b x \text{ khi } x > k. \quad (*)
+    \end{align*}
+    Xét hàm số $g(x)$ trên miền xác định $(k, \infty)$
+    \begin{align*}
+        g(x) = \frac{\log_b x}{x}.
+    \end{align*}
+    Khi đó
+    \begin{align*}
+        \lim_{x \to \infty} g(x) = \lim_{x \to \infty} \frac{\log_b x}{x}
+        = \lim_{x \to \infty} \frac{1}{x \ln b} = 0.
+    \end{align*}
+    Tuy nhiên, từ (*) ta được
+    \begin{align*}
+        g(x) = \frac{\log_b x}{x} \ge \frac{1}{M}
+    \end{align*}
+    dẫn đến mâu thuẫn. Do đó $x$ không là $O(\log_b x)$. \hfill \qed
+    \end{exampleblock}
+\end{frame}
+
+\subsection{Bài 3}
+
+\begin{frame}
+    \begin{block}{Bài 3}
+    Chứng minh
+    \begin{align*}
+        f(x+h) = \sum_{k=0}^{n-1} \frac{f^{(k)}(x)}{k!} h^k + O(h^n) \text{ khi } h \to 0.
+    \end{align*}
+    \end{block}
+    \begin{exampleblock}{Chứng minh}
+    Nhắc lại khai triển Taylor, với $h = |x_1 - x_0|$
+    \begin{align*}
+        f(x_1) = \sum_{k=0}^{n-1}\frac{f^{(k)}(x_0)}{k!} h^k + O(h^n) \text{ khi } x \to 0.
+    \end{align*}
+    Thay thế giá trị $x_0 = x$ và $x_1 = x + h$. Khi đó $|x_1 - x_0| = |(x + h) - x| = h$. Công thức Taylor trở thành
+    \begin{align*}
+        f(x + h) = \sum_{k=0}^{n-1}\frac{f^{(k)}(x)}{k!} h^k + O(h^n) \text{ khi } h \to 0.
+    \end{align*} \hfill \qed
+    \end{exampleblock}
+\end{frame}
+
+\subsection{Bài 4}
+
+\begin{frame}
+    \begin{block}{Bài 4}
+    \begin{enumerate}[label=(\roman*)]
+        \item $O(g_1(x)) + O(g_2(x)) = O(\max \{g_1(x), g_2(x) \})$,
+        \item $g_1(x) O(g_2(x)) = O(g_1(x) g_2(x))$,
+        \item $O(g_1(x)) O(g_2(x)) = O(g_1(x) g_2(x))$.
+    \end{enumerate}
+    \end{block}
+    
+    \begin{exampleblock}{Chứng minh}
+    (i) Đặt $g(x) = \max \{ g_1(x), g_2(x) \}$, khi đó
+    \begin{align*}
+        g_1(x) \le g(x), \forall x, \\
+        g_2(x) \le g(x), \forall x.
+    \end{align*}
+    Cho $M_1, M_2 > 0$, ta có
+    \begin{align*}
+        M_1 g_1(x) + M_2 g_2(x) \le M_1 g(x) + M_2 g(x) = (M_1 + M_2) g(x).
+    \end{align*}
+    Đặt $M := M_1 + M_2$, ta được $M_1 g_1(x) + M_2 g_2(x) \le M g(x)$, nghĩa là $O(g_1(x)) + O(g_2(x)) \subset O(g(x))$.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}
+    \begin{exampleblock}{Chứng minh}
+    Ngược lại, cho $M_1, M_2 > 1$, ta cố định giá trị $x$, khi đó xảy ra hai trường hợp
+    \begin{enumerate}[label=+]
+        \item Nếu $g(x) = g_1(x)$, thì $g(x) \le M_1 g_1(x) \le M_1 g_1(x) + M_2 g_2(x)$,
+        \item Nếu $g(x) = g_2(x)$, thì $g(x) \le M_2 g_2(x) \le M_1 g_1(x) + M_2 g_2(x)$.
+    \end{enumerate}
+    Nói cách khác
+    \begin{align*}
+        g(x) \le M_1 g_1(x) + M_2 g_2(x), \forall x
+    \end{align*}
+    dẫn đến $(O(g(x)) \subset O(g_1(x)) + O(g_2(x))$.
+    
+    \noindent (iii) Cho $M_1, M_2 > 0$, ta có
+    \begin{align*}
+        (M_1 g_1(x)) . (M_2 g_2(x)) = (M_1 M_2) (g_1(x) g_2(x)).
+    \end{align*}
+    Viết lại ở dạng yếu hơn
+    \begin{align*}
+        (M_1 g_1(x)) . (M_2 g_2(x)) \le (M_1 M_2) (g_1(x) g_2(x))
+    \end{align*}
+    kéo theo $O(g_1(x)) O(g_2(x)) \subset O(g_1(x) g_2(x))$.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}
+    \begin{exampleblock}{Chứng minh}
+    Ngược lại
+    \begin{align*}
+        g_1(x) g_2(x) = (1 . g_1(x)) . (1 . g_2(x)).
+    \end{align*}
+    Viết lại ở dạng yếu hơn
+    \begin{align*}
+        g_1(x) g_2(x) \le (M_1. g_1(x)) . (M_2. g_2(x))
+    \end{align*}
+    với $M_1, M_2 \ge 1$, suy ra $O(g_1(x) g_2(x)) \subset O(g_1(x)) O(g_2(x))$
+    
+    \noident (ii) Ta có nhận xét $g_1(x) = O(g_1(x))$, từ (iii) dẫn đến (ii). \hfill \qed
+    \end{exampleblock}
+\end{frame}
+
+\section{Bài tập lần 2}
+
+\subsection{Bài 1}
+
+\begin{frame}
+    \begin{block}{Bài 1}
+    Giải phương trình vi phân sau bằng phương pháp sai phân hữu hạn
+    \begin{align*}
+        \begin{cases}
+            u''(x) + \alpha u'(x) + \beta u(x) = f(x), x \in (a,b), \\
+            u(a) = D_a, \  u(b) = D_b,
+        \end{cases}
+    \end{align*}
+    với lưới $a = x_0 < x_1 < x_2 < x_3 = b$.
+    \end{block}
+    \begin{exampleblock}{Bài giải}
+    Thực hiện xấp xỉ phương trình vi phân, với $i = \overline{1,2}$
+    \begin{align*}
+        & \frac{u_{i-1} - 2u_i + u_{i+1}}{h^2} + \alpha \frac{u_{i+1} - u_{i-1}}{2h} + \beta u_i = f(x_i), \\
+        & (2 - \alpha h) u_{i-1} + (-4 + 2\beta h^2) u_i + (2 + \alpha h) u_{i+1} = 2h^2 f(x_i). \ (*)
+    \end{align*}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}
+    \begin{exampleblock}{Bài giải}
+    Với $i = 1$, ta có $u_0 = u(x_0) = D_a$, khi đó phương trình (*) trở thành
+    \begin{align*}
+        & (2 - \alpha h) D_a + (-4 + 2\beta h^2) u_1 + (2 + \alpha h) u_2 = 2h^2f(x_1) \\
+        & (-4 + 2\beta h^2) u_1 + (2 + \alpha h) u_2 = 2h^2f(x_1) - (2 - \alpha h) D_a.
+    \end{align*}
+    Tương tự cho trường hợp $i = 2$, ta có $u_3 = u(x_3) = D_b$, phương trình (*) tương đương
+    \begin{align*}
+        & (2 - \alpha h) u_1 + (-4 + 2\beta h^2) u_2 + (2 + \alpha h) D_b = 2h^2f(x_2), \\
+        & (2 - \alpha h) u_1 + (-4 + 2\beta h^2) u_2 = 2h^2f(x_2) - (2 + \alpha h) D_b.
+    \end{align*}
+    Khi đó, ta rút được công thức ma trận như sau
+    \begin{align*}
+        \begin{pmatrix}
+            -4 + 2\beta h^2 & 2 + \alpha h \\
+            2 - \alpha h & -4 + 2\beta h^2
+        \end{pmatrix}
+        \begin{pmatrix} u_1 \\ u_2 \end{pmatrix}
+        = \begin{pmatrix}
+            2h^2 f(x_1) - (2 - \alpha h) D_a \\
+            2h^2 f(x_2) - (2 + \alpha h) D_b
+        \end{pmatrix}.
+    \end{align*} \hfill \qed
+    \end{exampleblock}
+\end{frame}
+
+\subsection{Bài 2}
+
+\begin{frame}
+    \begin{block}{Bài 2}
+    Giải phương trình vi phân bằng phương pháp sai phân hữu hạn
+    \begin{align*}
+        \begin{cases}
+        u''(x) + \alpha u'(x) + \beta u(x) = f(x), x \in (a,b), \\
+        u'(a) = N_a, \  u(b) = D_b,
+        \end{cases}
+    \end{align*}
+    với lưới $a = x_0 < x_1 < x_2 < x_3 = b$.
+    \end{block}
+    \begin{exampleblock}{Bài giải}
+    Thực hiện xấp xỉ phương trình vi phân, với $i = \overline{0,2}$
+    \begin{align*}
+        & \frac{u_{i-1} - 2u_i + u_{i+1}}{h^2} + \alpha \frac{u_{i+1} - u_{i-1}}{2h} + \beta u_i = f(x_i), \\
+        & (2 - \alpha h) u_{i-1} + (-4 + 2\beta h^2) u_i + (2 + \alpha h) u_{i+1} = 2h^2 f(x_i). \ (*)
+    \end{align*}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}
+    \begin{exampleblock}{Bài giải}
+    Với $i = 0$, ta sử dụng thêm ghost point $x_{-1}$, khi đó
+    \begin{align*}
+        & \frac{u_1 - u_{-1}}{2h} \approx u'(a) = N_a, \\
+        & u_{-1} \approx u_1 - 2hN_a.
+    \end{align*}
+    Thế giá trị $u_{-1}$ vào phương trình (*)
+    \begin{align*}
+        & (2 - \alpha h) (u_1 - 2hN_a) + (-4 + 2\beta h^2) u_0 + (2 + \alpha h)u_1 = 2h^2f(x_0), \\
+        & (-4 + 2\beta h^2) u_0 + 4u_1 = 2h^2 f(x_0) + 2hN_a(2 - \alpha h).
+    \end{align*}
+    Với $i = 2$, ta có $u_3 = u(x_3) = D_b$, phương trình (*) tương đương
+    \begin{align*}
+        & (2 - \alpha h) u_1 + (-4 + 2\beta h^2) u_2 + (2 + \alpha h)D_b = 2h^2f(x_2), \\
+        & (2 - \alpha h) u_1 + (-4 + 2\beta h^2) u_2 = 2h^2f(x_2) - (2 + \alpha h)D_b.
+    \end{align*}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}
+    \begin{exampleblock}{Bài giải}
+    Công thức ma trận tương ứng $Mu = B$, với $u = (u_0 \  u_1 \  u_2)^T$ và
+    \begin{align*}
+        & M = \begin{pmatrix}
+            -4 + 2\beta h^2 & 4 & 0 \\
+            2 - \alpha h & -4 + 2\beta h^2 & 2 + \alpha h \\
+            0 & 2 - \alpha h & -4 + 2\beta h^2
+        \end{pmatrix}, \\
+        & B = \begin{pmatrix}
+            2h^2f(x_0) + 2hN_a(2 - \alpha h) \\
+            2h^2f(x_1) \\
+            2h^2f(x_2) - (2 + \alpha h)D_b
+        \end{pmatrix}.
+    \end{align*}
+    \hfill \qed
+    \end{exampleblock}
+\end{frame}
+
+\subsection{Bài 3}
+
+\begin{frame}
+    \begin{block}{Bài 3}
+    Giải phương trình vi phân bằng phương pháp sai phân hữu hạn
+    \begin{align*}
+        \begin{cases}
+        u''(x) + \alpha u'(x) + \beta u(x) = f(x), x \in (a,b), \\
+        C_a u'(a) + D_a u(a) = R_a, \  u'(b) = N_b,
+        \end{cases}
+    \end{align*}
+    với lưới $a = x_0 < x_1 < x_2 < x_3 = b$.
+    \end{block}
+    \begin{exampleblock}{Bài giải}
+    Thực hiện xấp xỉ phương trình vi phân, với $i = \overline{0,3}$
+    \begin{align*}
+        & \frac{u_{i-1} - 2u_i + u_{i+1}}{h^2} + \alpha \frac{u_{i+1} - u_{i-1}}{2h} + \beta u_i = f(x_i), \\
+        & (2 - \alpha h) u_{i-1} + (-4 + 2\beta h^2) u_i + (2 + \alpha h) u_{i+1} = 2h^2 f(x_i). \ (*)
+    \end{align*}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}
+    \begin{exampleblock}{Bài giải}
+    Với $i = 0$, ta sử dụng thêm ghost point $x_{-1}$, khi đó
+    \begin{align*}
+        & C_a \frac{u_1 - u_{-1}}{2h} + D_a u_0 \approx C_a u'(a) + D_a u(a) = R_a, \\
+        & u_{-1} \approx u_1 - \frac{2h}{C_a}(R_a - D_a u_0).
+    \end{align*}
+    Thế giá trị $u_{-1}$ vào phương trình (*)
+    \begin{align*}
+        & (2 - \alpha h) \left(u_1 - \frac{2h}{C_a}(R_a - D_a u_0)\right) + (-4 + 2\beta h^2)u_0 + (2 + \alpha h)u_1 = 2h^2f(x_0), \\
+        & \left(2h\frac{D_a}{C_a}(2 - \alpha h) - 4 + 2\beta h^2\right)u_0 + 4u_1 = 2h^2f(x_0) + 2h\frac{R_a}{C_a}(2 - \alpha h).
+    \end{align*}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}
+    \begin{exampleblock}{Bài giải}
+    Với $i = 3$, ta thêm ghost point $x_4$, khi đó
+    \begin{align*}
+        & \frac{u_4 - u_2}{2h} \approx u'(b) = N_b, \\
+        & u_4 \approx u_2 + 2hN_b.
+    \end{align*}
+    Thế giá trị $u_4$ vào phương trình (*)
+    \begin{align*}
+        & (2 - \alpha h) u_2 + (-4 + 2\beta h^2) u_3 + (2 + \alpha h)(u_2 + 2hN_b) = 2h^2f(x_3), \\
+        & 4 u_2 + (-4 + 2\beta h^2) u_3 = 2h^2 f(x_3) - 2hN_b(2 + \alpha h).
+    \end{align*}
+    \end{exampleblock}    
+\end{frame}
+
+\begin{frame}
+    \begin{exampleblock}{Bài giải}
+    Công thức ma trận tương ứng $Mu = B$, với $u = (u_0 \  u_1 \  u_2 \  u_3)^T$ và
+    \begin{align*}
+        & M = \begin{pmatrix}
+        2h\frac{D_a}{C_a}(2 - \alpha h) - 4 + 2\beta h^2 & 4 & 0 & 0 \\
+        2 - \alpha h & -4 + 2\beta h^2 & 2 + \alpha h & 0 \\
+        0 & 2 - \alpha h & -4 + 2\beta h^2 & 2 + \alpha h \\
+        0 & 0 & 4 & -4 + 2\beta h^2
+        \end{pmatrix}, \\
+        & B = \begin{pmatrix}
+        2h^2f(x_0) + 2h\frac{R_a}{C_a}(2 - \alpha h) \\
+        2h^2f(x_1) \\
+        2h^2f(x_2) \\
+        2h^2f(x_3) - 2h N_b(2 + \alpha h)
+        \end{pmatrix}.
+    \end{align*} \hill \qed
+    \end{exampleblock}
+\end{frame}
+
+\subsection{Bài 4}
+
+\begin{frame}
+    \begin{block}{Bài 4}
+    Giải phương trình vi phân bằng phương pháp sai phân hữu hạn
+    \begin{align*}
+        \begin{cases}
+        u''(x) + \alpha u'(x) + \beta u(x) = f(x), x \in (a,b), \\
+        C_a u'(a) + D_a u(a) = R_a, \  C_b u'(b) + D_b u(b) = R_b,
+        \end{cases}
+    \end{align*}
+    với lưới $a = x_0 < x_1 < x_2 < x_3 = b$.
+    \end{block}
+    \begin{exampleblock}{Bài giải}
+    Thực hiện xấp xỉ phương trình vi phân, với $i = \overline{0,3}$
+    \begin{align*}
+        & \frac{u_{i-1} - 2u_i + u_{i+1}}{h^2} + \alpha \frac{u_{i+1} - u_{i-1}}{2h} + \beta u_i = f(x_i), \\
+        & (2 - \alpha h) u_{i-1} + (-4 + 2\beta h^2) u_i + (2 + \alpha h) u_{i+1} = 2h^2 f(x_i). \ (*)
+    \end{align*}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}
+    \begin{exampleblock}{Bài giải}
+    Với $i = 0$, ta sử dụng thêm ghost point $x_{-1}$, khi đó
+    \begin{align*}
+        & C_a \frac{u_1 - u_{-1}}{2h} + D_a u_0 \approx C_a u'(a) + D_a u(a) = R_a, \\
+        & u_{-1} \approx u_1 - \frac{2h}{C_a}(R_a - D_a u_0).
+    \end{align*}
+    Thế giá trị $u_{-1}$ vào phương trình (*)
+    \begin{align*}
+        & (2 - \alpha h) \left(u_1 - \frac{2h}{C_a}(R_a - D_a u_0)\right) + (-4 + 2\beta h^2)u_0 + (2 + \alpha h)u_1 = 2h^2f(x_0), \\
+        & \left(2h\frac{D_a}{C_a}(2 - \alpha h) - 4 + 2\beta h^2\right)u_0 + 4u_1 = 2h^2f(x_0) + 2h\frac{R_a}{C_a}(2 - \alpha h).
+    \end{align*}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}
+    \begin{exampleblock}{Bài giải}
+    Với $i = 3$, ta dùng thêm ghost point $x_4$, khi đó
+    \begin{align*}
+        & C_b \frac{u_4 - u_2}{2h} + D_b u_3 \approx C_b u'(b) + D_b u(b) = R_b, \\
+        & u_4 \approx u_2 + \frac{2h}{C_b}(R_b - D_b u_3).
+    \end{align*}
+    Thế $u_4$ vào phương trình (*)
+    \begin{align*}
+        & (2 - \alpha h) u_2 + (-4 + 2\beta h^2) u_3 + (2 + \alpha h) \left(u_2 + \frac{2h}{C_b}(R_b - D_b u_3)\right) = 2h^2 f(x_3), \\
+        & 4 u_2 + \left(-4 + 2\beta h^2 - 2h\frac{D_b}{C_b}(2 + \alpha h)\right) u_3 = 2h^2 f(x_3) - 2h \frac{R_b}{C_b}(2 + \alpha h).
+    \end{align*}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}
+    \begin{exampleblock}{Bài giải}
+    Công thức ma trận tương ứng $Mu = B$, với $u = (u_0 \  u_1 \  u_2 \   u_3)^T$ và
+    \begin{align*}
+        & M = \begin{pmatrix}
+        M_{11} & 4 & 0 & 0 \\
+        2 - \alpha h & -4 + 2\beta h^2 & 2 + \alpha h & 0 \\
+        0 & 2 - \alpha h & -4 + 2\beta h^2 & 2 + \alpha h \\
+        0 & 0 & 4 & M_{44}
+        \end{pmatrix}, \\
+        & B = \begin{pmatrix}
+        2h^2 f(x_0) + 2h\frac{R_a}{C_a}(2 - \alpha h) \\
+        2h^2 f(x_1) \\
+        2h^2 f(x_2) \\
+        2h^2 f(x_3) - 2h \frac{R_b}{C_b}(2 + \alpha h)
+        \end{pmatrix},
+    \end{align*}
+    với
+    \begin{align*}
+        M_{11} &= 2h\frac{D_a}{C_a}(2 - \alpha h) - 4 + 2\beta h^2, \\
+        M_{44} &= -4 + 2\beta h^2 - 2h\frac{D_b}{C_b}(2 + \alpha h).
+    \end{align*} \hfill \qed
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}
+    \begin{center}
+        \Huge {\bf Cảm ơn thầy và các bạn đã theo dõi!}
+    \end{center}
+\end{frame}
+
+\end{document}
